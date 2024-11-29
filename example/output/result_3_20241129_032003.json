@@ -1,0 +1,8 @@
+{
+    "question_answer": "**问题：**\n\n如何在Flink中使用JDBC驱动连接到Flink SQL网关，并在流式查询中实现基于时间的窗口聚合操作？\n\n**答案：**\n\n要在Flink中使用JDBC驱动连接到Flink SQL网关，并实现基于时间的窗口聚合操作，我们需要结合Flink JDBC驱动的文档和窗口聚合的文档。\n\n首先，根据Flink JDBC驱动的文档，我们可以使用Flink JDBC驱动通过SQL网关连接到Flink集群。要实现这一连接，我们需要：\n\n1. 启动一个SQL网关，并确保它连接到正在运行的Flink集群。\n2. 下载`flink-sql-jdbc-driver-bundle` JAR文件，并将其添加到项目中。\n3. 使用工具如Beeline或SQLLine，通过命令连接到Flink SQL网关，例如：\n    ```sql\n    !connect jdbc:flink://localhost:8083\n    ```\n\n在连接成功后，我们可以执行Flink SQL语句。\n\n接下来，根据窗口聚合的文档，我们可以定义一个`OVER`窗口来实现基于时间的聚合操作。例如，我们可以计算每个订单的金额总和，该总和是所有在当前订单之前一小时内接收到的相同产品订单的金额之和：\n\n```sql\nSELECT order_id, order_time, amount,\n  SUM(amount) OVER (\n    PARTITION BY product\n    ORDER BY order_time\n    RANGE BETWEEN INTERVAL '1' HOUR PRECEDING AND CURRENT ROW\n  ) AS one_hour_prod_amount_sum\nFROM Orders\n```\n\n在此SQL语句中：\n\n- `PARTITION BY product`表示我们根据产品对数据进行分区。\n- `ORDER BY order_time`定义了时间的排序，`RANGE BETWEEN INTERVAL '1' HOUR PRECEDING AND CURRENT ROW`表示我们只考虑当前订单时间之前一小时内的订单。\n\n通过这种方式，我们可以在Flink中使用JDBC驱动连接到SQL网关，并利用Flink的窗口聚合功能进行复杂的流式数据处理。",
+    "documents": [
+        "dev/table/jdbcDriver.md",
+        "dev/table/sql/queries/over-agg.md"
+    ],
+    "timestamp": "2024-11-29T03:20:03.655731"
+}
