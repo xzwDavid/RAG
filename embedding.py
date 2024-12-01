@@ -39,25 +39,40 @@ input_texts = [
     "sorting algorithms"
 ]
 
-# 初始化Tokenizer和Model
-tokenizer = AutoTokenizer.from_pretrained("thenlper/gte-large")
-model = AutoModel.from_pretrained("thenlper/gte-large")
 
-# 对输入文本进行编码
-batch_dict = tokenizer(input_texts, max_length=512, padding=True, truncation=True, return_tensors='pt')
+def get_embedding(input_texts ):
+    # 初始化Tokenizer和Model
+    tokenizer = AutoTokenizer.from_pretrained("thenlper/gte-large")
+    model = AutoModel.from_pretrained("thenlper/gte-large")
 
-# 生成embedding
-with torch.no_grad():
-    outputs = model(**batch_dict)
-    embeddings = average_pool(outputs.last_hidden_state, batch_dict['attention_mask'])
+    # 对输入文本进行编码
+    batch_dict = tokenizer(input_texts, max_length=512, padding=True, truncation=True, return_tensors='pt')
 
-# (可选) 归一化embedding
-embeddings = F.normalize(embeddings, p=2, dim=1)
+    # 生成embedding
+    with torch.no_grad():
+        outputs = model(**batch_dict)
+        embeddings = average_pool(outputs.last_hidden_state, batch_dict['attention_mask'])
 
-# **步骤1：将embedding存储到Pinecone中**
+    # (可选) 归一化embedding
+    embeddings = F.normalize(embeddings, p=2, dim=1)
 
-# 将embedding转换为numpy数组
-embeddings_np = embeddings.cpu().numpy()
+    # **步骤1：将embedding存储到Pinecone中**
+
+    # 将embedding转换为numpy数组
+    embeddings_np = embeddings.cpu().numpy()
+    return embeddings_np
+
+# 4 chunk
+embeddings_np = get_embedding(input_texts)
+print(get_embedding(input_texts).shape)
+#(4,1024)
+concat_text = ""
+# 1 chunk
+for text in input_texts:
+    concat_text = concat_text + text
+print(get_embedding(concat_text).shape)
+#(1,1024)
+
 
 # 为每个文本生成唯一的id
 ids = [f'id_{i}' for i in range(len(input_texts))]
