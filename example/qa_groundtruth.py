@@ -1,6 +1,8 @@
 import os
 import json
 import random
+from collections import deque, defaultdict
+
 import requests
 import time
 from typing import Optional
@@ -28,9 +30,6 @@ def build_tree_from_directory(root_dir, current_path=''):
             entry_path = os.path.join(current_path, entry)
             child_node = build_tree_from_directory(root_dir, entry_path)
             node.children.append(child_node)
-    else:
-        # If it's a file, return the node directly
-        pass  # No additional processing needed for file nodes
     return node
 
 
@@ -55,7 +54,7 @@ def collect_parent_child_md_files(node):
                 for subfolder in subfolders:
                     child_md_files = collect_all_md_files(subfolder)
                     for child_md in child_md_files:
-                        parent_child_pairs.append(((md_file.path, md_file.path), (child_md.path, child_md.path)))
+                        parent_child_pairs.append((md_file.path, child_md.path))
 
     # Recursively traverse subfolders
     for child in node.children:
@@ -96,11 +95,10 @@ def read_md_files_from_paths(root_path, md_file_paths):
 
 
 def create_prompt_from_contents(contents):
-    # Combine multiple document contents and create appropriate prompt
     combined_content = '\n'.join(contents)
     prompt = (
         "Based on the following documents, please generate a question that requires combining multiple documents to answer, "
-        "and provide a detailed answer. Both the question and answer should be in Chinese. "
+        "and provide a detailed answer."
         "Make sure the answer requires referencing content from multiple documents.\n\n"
         "Document contents:\n"
         f"{combined_content}"
@@ -109,19 +107,6 @@ def create_prompt_from_contents(contents):
 
 
 def generate_question_and_answer(prompt, api_url, api_key, max_retries=3, delay_seconds=3) -> Optional[str]:
-    """
-    Generate question and answer with retry mechanism and delay between requests
-
-    Args:
-        prompt: The input prompt
-        api_url: Azure OpenAI API URL
-        api_key: API key
-        max_retries: Maximum number of retry attempts
-        delay_seconds: Delay between requests in seconds
-
-    Returns:
-        Generated answer or None if failed
-    """
     headers = {
         'Content-Type': 'application/json',
         'api-key': api_key
@@ -140,9 +125,8 @@ def generate_question_and_answer(prompt, api_url, api_key, max_retries=3, delay_
 
     for attempt in range(max_retries):
         try:
-            # Add delay before each request (except first attempt)
             if attempt > 0:
-                time.sleep(delay_seconds)
+                time.sleep(3)
 
             print(f"Making API request (attempt {attempt + 1}/{max_retries})...")
             response = requests.post(api_url, headers=headers, json=payload, timeout=30)
@@ -150,10 +134,10 @@ def generate_question_and_answer(prompt, api_url, api_key, max_retries=3, delay_
             if response.status_code == 200:
                 result = response.json()
                 return result['choices'][0]['message']['content']
-            elif response.status_code == 429:  # Rate limit exceeded
+            elif response.status_code == 429:
                 retry_after = int(response.headers.get('Retry-After', delay_seconds))
                 print(f"Rate limit exceeded. Waiting {retry_after} seconds...")
-                time.sleep(retry_after)
+                time.sleep(3)
                 continue
             else:
                 print(f"Request failed with status code: {response.status_code}")
@@ -163,7 +147,7 @@ def generate_question_and_answer(prompt, api_url, api_key, max_retries=3, delay_
             print(f"Request error occurred: {str(e)}")
             if attempt < max_retries - 1:
                 print(f"Retrying in {delay_seconds} seconds...")
-                time.sleep(delay_seconds)
+                time.sleep(3)
             continue
 
     print("All retry attempts failed")
@@ -180,6 +164,59 @@ def save_results(question_answer, md_files_list, output_path):
     with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
     print(f"Results saved to {output_path}")
+
+
+def find_document_paths(parent_child_pairs, min_path_length=3, max_paths=5):
+    """
+    Find longer document paths using parent-child relationships.
+    Returns a list of document paths, where each path is a list of document paths.
+    """
+    # Create adjacency list representation
+    graph = defaultdict(list)
+    for parent, child in parent_child_pairs:
+        graph[parent].append(child)
+
+    # Store all found paths
+    all_paths = []
+
+    # Try starting from each document
+    for start_doc in graph.keys():
+        paths = find_paths_from_start(graph, start_doc, min_path_length)
+        all_paths.extend(paths)
+
+        # Break if we have enough paths
+        if len(all_paths) >= max_paths:
+            break
+
+    # Sort paths by length (descending) and take top max_paths
+    all_paths.sort(key=len, reverse=True)
+    return all_paths[:max_paths]
+
+
+def find_paths_from_start(graph, start_doc, min_path_length):
+    """
+    Find all paths starting from a specific document that meet the minimum length requirement.
+    Uses BFS to find paths.
+    """
+    paths = []
+    queue = deque([(start_doc, [start_doc])])
+    visited = set()
+
+    while queue:
+        current_doc, current_path = queue.popleft()
+
+        # If path is long enough, add it to results
+        if len(current_path) >= min_path_length:
+            paths.append(current_path)
+            continue
+
+        # Explore children
+        for child in graph[current_doc]:
+            if child not in current_path:  # Avoid cycles
+                new_path = current_path + [child]
+                queue.append((child, new_path))
+
+    return paths
 
 
 def main():
@@ -201,8 +238,8 @@ def main():
     output_dir = 'output'
     os.makedirs(output_dir, exist_ok=True)
 
-    # Build tree and collect pairs
     try:
+        # Build tree and collect parent-child pairs
         root = build_tree_from_directory(root_docs_path)
         parent_child_pairs = collect_parent_child_md_files(root)
 
@@ -210,17 +247,23 @@ def main():
             print("No valid document pairs found.")
             return
 
-        num_pairs_to_select = 5
-        selected_pairs = random.sample(parent_child_pairs, min(num_pairs_to_select, len(parent_child_pairs)))
+        # Find document paths
+        document_paths = find_document_paths(parent_child_pairs, min_path_length=4, max_paths=6)
 
-        for idx, pair in enumerate(selected_pairs, 1):
-            parent_md_path, _ = pair[0]
-            child_md_path, _ = pair[1]
-            print(f"\nProcessing pair {idx}/{len(selected_pairs)}:")
-            print(f"Parent: {parent_md_path}")
-            print(f"Child: {child_md_path}")
+        print(f"Found {len(document_paths)} document paths:")
+        for idx, path in enumerate(document_paths, 1):
+            print(f"\nPath {idx}:")
+            for doc in path:
+                print(f"  {doc}")
 
-            contents, md_files = read_md_files_from_paths(root_docs_path, [parent_md_path, child_md_path])
+        # Process each path
+        for idx, doc_path in enumerate(document_paths, 1):
+            print(f"\nProcessing path {idx}/{len(document_paths)}:")
+            for doc in doc_path:
+                print(f"  {doc}")
+
+            # Read contents of all documents in the path
+            contents, md_files = read_md_files_from_paths(root_docs_path, doc_path)
 
             if not contents:
                 print("Files not found, skipping...")
@@ -233,10 +276,9 @@ def main():
                 output_file = os.path.join(output_dir, f'result_{idx}_{datetime.now().strftime("%Y%m%d_%H%M%S")}.json')
                 save_results(question_answer, md_files, output_file)
 
-            # Add delay between processing pairs
-            if idx < len(selected_pairs):
-                delay = 5  # 5 seconds between processing pairs
-                print(f"Waiting {delay} seconds before processing next pair...")
+            if idx < len(document_paths):
+                delay = 5
+                print(f"Waiting {delay} seconds before processing next path...")
                 time.sleep(delay)
 
     except Exception as e:
