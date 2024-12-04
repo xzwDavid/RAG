@@ -1,0 +1,497 @@
+{
+    "name": "index",
+    "children": [
+        {
+            "name": "quick-start",
+            "children": [
+                {
+                    "name": "rdd-programming-guide",
+                    "children": [
+                        {
+                            "name": "submitting-applications",
+                            "children": [
+                                {
+                                    "name": "cluster-overview",
+                                    "children": [
+                                        {
+                                            "name": "spark-standalone",
+                                            "children": [
+                                                {
+                                                    "name": "security",
+                                                    "children": [
+                                                        {
+                                                            "name": "running-on-yarn",
+                                                            "children": [
+                                                                {
+                                                                    "name": "building-spark",
+                                                                    "children": []
+                                                                },
+                                                                {
+                                                                    "name": "configuration",
+                                                                    "children": [
+                                                                        {
+                                                                            "name": "running-on-kubernetes",
+                                                                            "children": []
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "name": "job-scheduling",
+                                                    "children": []
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "name": "monitoring",
+                                            "children": [
+                                                {
+                                                    "name": "web-ui",
+                                                    "children": [
+                                                        {
+                                                            "name": "tuning",
+                                                            "children": [
+                                                                {
+                                                                    "name": "sql-performance-tuning",
+                                                                    "children": [
+                                                                        {
+                                                                            "name": "sql-ref-syntax-qry-select-hints",
+                                                                            "children": [
+                                                                                {
+                                                                                    "name": "sql-ref-syntax-qry-select-join",
+                                                                                    "children": [
+                                                                                        {
+                                                                                            "name": "sql-ref-syntax-qry-select",
+                                                                                            "children": [
+                                                                                                {
+                                                                                                    "name": "sql-ref-syntax-qry-select-cte",
+                                                                                                    "children": []
+                                                                                                },
+                                                                                                {
+                                                                                                    "name": "sql-ref-syntax-qry-select-pivot",
+                                                                                                    "children": [
+                                                                                                        {
+                                                                                                            "name": "sql-ref-syntax-qry-select-where",
+                                                                                                            "children": [
+                                                                                                                {
+                                                                                                                    "name": "sql-ref-syntax-qry-select-groupby",
+                                                                                                                    "children": [
+                                                                                                                        {
+                                                                                                                            "name": "sql-ref-syntax-qry-select-having",
+                                                                                                                            "children": [
+                                                                                                                                {
+                                                                                                                                    "name": "sql-ref-syntax-qry-select-orderby",
+                                                                                                                                    "children": [
+                                                                                                                                        {
+                                                                                                                                            "name": "sql-ref-syntax-qry-select-sortby",
+                                                                                                                                            "children": [
+                                                                                                                                                {
+                                                                                                                                                    "name": "sql-ref-syntax-qry-select-clusterby",
+                                                                                                                                                    "children": [
+                                                                                                                                                        {
+                                                                                                                                                            "name": "sql-ref-syntax-qry-select-distribute-by",
+                                                                                                                                                            "children": [
+                                                                                                                                                                {
+                                                                                                                                                                    "name": "sql-ref-syntax-qry-select-limit",
+                                                                                                                                                                    "children": [
+                                                                                                                                                                        {
+                                                                                                                                                                            "name": "sql-ref-syntax-qry-select-offset",
+                                                                                                                                                                            "children": [
+                                                                                                                                                                                {
+                                                                                                                                                                                    "name": "sql-ref-syntax-qry-select-case",
+                                                                                                                                                                                    "children": [
+                                                                                                                                                                                        {
+                                                                                                                                                                                            "name": "sql-ref-syntax-qry-select-unpivot",
+                                                                                                                                                                                            "children": [
+                                                                                                                                                                                                {
+                                                                                                                                                                                                    "name": "sql-ref-syntax-qry-select-lateral-view",
+                                                                                                                                                                                                    "children": []
+                                                                                                                                                                                                }
+                                                                                                                                                                                            ]
+                                                                                                                                                                                        }
+                                                                                                                                                                                    ]
+                                                                                                                                                                                }
+                                                                                                                                                                            ]
+                                                                                                                                                                        }
+                                                                                                                                                                    ]
+                                                                                                                                                                }
+                                                                                                                                                            ]
+                                                                                                                                                        }
+                                                                                                                                                    ]
+                                                                                                                                                }
+                                                                                                                                            ]
+                                                                                                                                        }
+                                                                                                                                    ]
+                                                                                                                                }
+                                                                                                                            ]
+                                                                                                                        }
+                                                                                                                    ]
+                                                                                                                }
+                                                                                                            ]
+                                                                                                        }
+                                                                                                    ]
+                                                                                                },
+                                                                                                {
+                                                                                                    "name": "sql-ref-syntax-qry-select-tvf",
+                                                                                                    "children": []
+                                                                                                },
+                                                                                                {
+                                                                                                    "name": "sql-ref-syntax-qry-select-inline-table",
+                                                                                                    "children": []
+                                                                                                },
+                                                                                                {
+                                                                                                    "name": "sql-ref-syntax-qry-select-lateral-subquery",
+                                                                                                    "children": []
+                                                                                                },
+                                                                                                {
+                                                                                                    "name": "sql-ref-syntax-qry-select-file",
+                                                                                                    "children": []
+                                                                                                },
+                                                                                                {
+                                                                                                    "name": "sql-ref-syntax-qry-select-like",
+                                                                                                    "children": []
+                                                                                                },
+                                                                                                {
+                                                                                                    "name": "sql-ref-syntax-qry-select-setops",
+                                                                                                    "children": []
+                                                                                                },
+                                                                                                {
+                                                                                                    "name": "sql-ref-syntax-qry-select-sampling",
+                                                                                                    "children": []
+                                                                                                },
+                                                                                                {
+                                                                                                    "name": "sql-ref-syntax-qry-select-window",
+                                                                                                    "children": [
+                                                                                                        {
+                                                                                                            "name": "sql-ref-functions-builtin",
+                                                                                                            "children": []
+                                                                                                        }
+                                                                                                    ]
+                                                                                                },
+                                                                                                {
+                                                                                                    "name": "sql-ref-syntax-qry-select-transform",
+                                                                                                    "children": [
+                                                                                                        {
+                                                                                                            "name": "sql-ref-syntax-hive-format",
+                                                                                                            "children": []
+                                                                                                        }
+                                                                                                    ]
+                                                                                                },
+                                                                                                {
+                                                                                                    "name": "sql-ref-syntax-qry-star",
+                                                                                                    "children": []
+                                                                                                }
+                                                                                            ]
+                                                                                        }
+                                                                                    ]
+                                                                                }
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            "name": "sql-ref-syntax-aux-analyze-table",
+                                                                            "children": []
+                                                                        },
+                                                                        {
+                                                                            "name": "sql-ref-syntax-aux-describe-table",
+                                                                            "children": [
+                                                                                {
+                                                                                    "name": "sql-ref-syntax-aux-describe-database",
+                                                                                    "children": [
+                                                                                        {
+                                                                                            "name": "sql-ref-syntax-aux-describe-function",
+                                                                                            "children": [
+                                                                                                {
+                                                                                                    "name": "sql-ref-syntax-aux-describe-query",
+                                                                                                    "children": []
+                                                                                                }
+                                                                                            ]
+                                                                                        }
+                                                                                    ]
+                                                                                }
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            "name": "sql-data-sources-load-save-functions",
+                                                                            "children": [
+                                                                                {
+                                                                                    "name": "sql-data-sources-parquet",
+                                                                                    "children": [
+                                                                                        {
+                                                                                            "name": "sql-ref-syntax-ddl-create-table-datasource",
+                                                                                            "children": [
+                                                                                                {
+                                                                                                    "name": "sql-ref-syntax-ddl-create-table-hiveformat",
+                                                                                                    "children": [
+                                                                                                        {
+                                                                                                            "name": "sql-ref-syntax-ddl-create-table-like",
+                                                                                                            "children": []
+                                                                                                        }
+                                                                                                    ]
+                                                                                                }
+                                                                                            ]
+                                                                                        }
+                                                                                    ]
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            "name": "sql-distributed-sql-engine",
+                                                            "children": [
+                                                                {
+                                                                    "name": "sql-distributed-sql-engine-spark-sql-cli",
+                                                                    "children": []
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "sql-programming-guide",
+            "children": [
+                {
+                    "name": "sql-data-sources-hive-tables",
+                    "children": []
+                },
+                {
+                    "name": "sql-getting-started",
+                    "children": [
+                        {
+                            "name": "sql-data-sources",
+                            "children": [
+                                {
+                                    "name": "sql-data-sources-generic-options",
+                                    "children": []
+                                },
+                                {
+                                    "name": "sql-data-sources-orc",
+                                    "children": []
+                                },
+                                {
+                                    "name": "sql-data-sources-json",
+                                    "children": []
+                                },
+                                {
+                                    "name": "sql-data-sources-csv",
+                                    "children": []
+                                },
+                                {
+                                    "name": "sql-data-sources-text",
+                                    "children": []
+                                },
+                                {
+                                    "name": "sql-data-sources-xml",
+                                    "children": []
+                                },
+                                {
+                                    "name": "sql-data-sources-jdbc",
+                                    "children": []
+                                },
+                                {
+                                    "name": "sql-data-sources-avro",
+                                    "children": []
+                                },
+                                {
+                                    "name": "sql-data-sources-protobuf",
+                                    "children": []
+                                },
+                                {
+                                    "name": "sql-data-sources-binaryFile",
+                                    "children": []
+                                },
+                                {
+                                    "name": "sql-data-sources-troubleshooting",
+                                    "children": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "sql-ref-functions-udf-aggregate",
+                            "children": [
+                                {
+                                    "name": "sql-ref-functions-udf-scalar",
+                                    "children": [
+                                        {
+                                            "name": "sql-ref-functions-udf-hive",
+                                            "children": []
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "streaming-programming-guide",
+            "children": [
+                {
+                    "name": "ml-guide",
+                    "children": [
+                        {
+                            "name": "ml-pipeline",
+                            "children": [
+                                {
+                                    "name": "sql-ref-datatypes",
+                                    "children": []
+                                },
+                                {
+                                    "name": "mllib-data-types",
+                                    "children": []
+                                },
+                                {
+                                    "name": "ml-tuning",
+                                    "children": []
+                                }
+                            ]
+                        },
+                        {
+                            "name": "ml-linalg-guide",
+                            "children": []
+                        },
+                        {
+                            "name": "ml-features",
+                            "children": [
+                                {
+                                    "name": "mllib-feature-extraction",
+                                    "children": [
+                                        {
+                                            "name": "mllib-dimensionality-reduction",
+                                            "children": []
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "ml-classification-regression",
+                            "children": [
+                                {
+                                    "name": "mllib-linear-methods",
+                                    "children": [
+                                        {
+                                            "name": "mllib-optimization",
+                                            "children": []
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "mllib-decision-tree",
+                                    "children": [
+                                        {
+                                            "name": "mllib-ensembles",
+                                            "children": []
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "ml-migration-guide",
+                            "children": [
+                                {
+                                    "name": "sql-migration-guide",
+                                    "children": [
+                                        {
+                                            "name": "sql-ref-datetime-pattern",
+                                            "children": []
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "graphx-programming-guide",
+                    "children": []
+                },
+                {
+                    "name": "streaming-kafka-0-10-integration",
+                    "children": [
+                        {
+                            "name": "structured-streaming-kafka-integration",
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "name": "streaming-kinesis-integration",
+                    "children": []
+                },
+                {
+                    "name": "streaming-custom-receivers",
+                    "children": []
+                }
+            ]
+        },
+        {
+            "name": "sparkr",
+            "children": [
+                {
+                    "name": "sql-pyspark-pandas-with-arrow",
+                    "children": []
+                },
+                {
+                    "name": "sparkr-migration-guide",
+                    "children": []
+                }
+            ]
+        },
+        {
+            "name": "hardware-provisioning",
+            "children": []
+        },
+        {
+            "name": "cloud-integration",
+            "children": []
+        },
+        {
+            "name": "storage-openstack-swift",
+            "children": []
+        },
+        {
+            "name": "migration-guide",
+            "children": [
+                {
+                    "name": "core-migration-guide",
+                    "children": []
+                },
+                {
+                    "name": "pyspark-migration-guide",
+                    "children": []
+                }
+            ]
+        },
+        {
+            "name": "hadoop-provided",
+            "children": []
+        },
+        {
+            "name": "spark-connect-overview",
+            "children": [
+                {
+                    "name": "app-dev-spark-connect",
+                    "children": []
+                }
+            ]
+        }
+    ]
+}
