@@ -1,0 +1,59 @@
+
+
+</td>
+  <td>2.3.0</td>
+</tr>
+<tr>
+  <td><code>spark.kubernetes.authenticate.driver.serviceAccountName</code></td>
+  <td>(none)</td>
+  <td>
+    Name of the service account to use for authenticating against the Kubernetes API server from the driver pod when
+    requesting executors. This service account must have the appropriate permissions to create pods, services and configmaps. In client mode, use <code>spark.kubernetes.authenticate.driver.serviceAccountName</code> instead. </td>
+  <td>2.3.0</td>
+</tr>
+<tr>
+  <td><code>spark.kubernetes.authenticate.driver.username</code></td>
+  <td>(none)</td>
+  <td>
+    Username to use when authenticating against the Kubernetes API server from the driver pod when requesting executors. This username must be
+    associated with a Kubernetes service account that has the appropriate permissions to create pods, services and configmaps. In client mode, use <code>spark.kubernetes.authenticate.driver.username</code> instead. </td>
+  <td>2.3.0</td>
+</tr>
+<tr>
+  <td><code>spark.kubernetes.authenticate.driver.password</code></td>
+  <td>(none)</td>
+  <td>
+    Password to use when authenticating against the Kubernetes API server from the driver pod when requesting executors. This password must be
+    associated with a Kubernetes service account that has the appropriate permissions to create pods, services and configmaps. In client mode, use <code>spark.kubernetes.authenticate.driver.password</code> instead. </td>
+  <td>2.3.0</td>
+</tr>
+<tr>
+  <td><code>spark.kubernetes.authenticate.driver.tokenSecret.name</code></td>
+  <td>(none)</td>
+  <td>
+    Name of the Kubernetes secret containing the OAuth token to use when authenticating against the Kubernetes API server from the driver pod when
+    requesting executors. This secret must be in the same namespace as the driver pod. In client mode, use <code>spark.kubernetes.authenticate.driver.tokenSecret.name</code> instead. </td>
+  <td>2.3.0</td>
+</tr>
+<tr>
+  <td><code>spark.kubernetes.authenticate.driver.tokenSecret.itemKey</code></td>
+  <td>(none)</td>
+  <td>
+    Name of the item in the Kubernetes secret containing the OAuth token to use when authenticating against the Kubernetes API server from the driver pod when
+    requesting executors. This item must be in the same namespace as the driver pod. In client mode, use <code>spark.kubernetes.authenticate.driver.tokenSecret.itemKey</code> instead. </td>
+  <td>2.3.0</td>
+</tr>
+<tr>
+  <td><code>spark.kubernetes.authenticate.driver.tokenSecret.secretKey</code></td>
+  <td>(none)</td>
+  <td>
+    Name of the secret key in the Kubernetes secret containing the OAuth token to use when authenticating against the Kubernetes API server from the driver pod when
+    requesting executors. This secret must be in the same namespace as the driver pod. In client mode, use <code>spark.kubernetes.authenticate.driver.tokenSecret.secretKey</code> instead. </td>
+  <td>2.3.0</td>
+</tr>
+<tr>
+  <td><code>spark.kubernetes.authenticate.driver.tokenSecret.secretKeyRef</code></td>
+  <td>(none)</td>
+  <td>
+    Name of the secret key in the Kubernetes secret containing the OAuth token to use when authenticating against the Kubernetes API server from the driver pod when
+    requesting executors. This secret must be in the same namespace as the driver pod. In client mode, use <code>spark.kubernetes.authenticate.driver.tokenSecret.secretKeyRef</code> instead. </td

@@ -1,0 +1,65 @@
+
+
+# Spark Streaming
+
+Spark Streaming is an extension of the core Spark API that enables scalable, high-throughput, fault-tolerant stream processing of live data streams. Data can be ingested from many sources like Kafka, Kinesis, or TCP sockets, and can be processed using complex algorithms expressed with high-level functions like `map`, `reduce`, `join` and `window`. Finally, processed data can be pushed out to filesystems, databases, and live dashboards. In fact, you can apply Spark's [machine learning](ml-guide.html) and [graph processing](graphx-programming-guide.html) algorithms on data streams.
+
+<p style="text-align: center;">
+  <img
+    src="img/streaming-arch.png"
+    title="Spark Streaming architecture"
+    alt="Spark Streaming"
+    width="70%"
+  />
+</p>
+
+Spark Streaming works as follows. Spark Streaming receives live input data streams and divides
+the data into batches, which are then processed by the Spark engine to generate the final
+stream of results in batches.
+
+<p style="text-align: center;">
+  <img src="img/streaming-flow.png"
+       title="Spark Streaming data flow"
+       alt="Spark Streaming"
+       width="70%" />
+</p>
+
+Spark Streaming provides a high-level abstraction called *discretized stream* or *DStream*,
+which represents a continuous stream of data. DStreams can be created either from input data
+streams from sources such as Kafka, and Kinesis, or by applying high-level operations on other DStreams. Internally, a DStream is represented as a sequence of
+[RDDs](api/scala/org/apache/spark/rdd/RDD.html). This guide shows you how to start writing Spark Streaming programs with DStreams. You can
+write Spark Streaming programs in Scala, Java or Python (introduced in Spark 1.2),
+all of which are presented in this guide. You will find tabs throughout this guide that let you choose between code snippets of
+different languages. **Note:** There are a few APIs that are either different or not available in Python. Throughout this guide, you will find the tag <span class="badge" style="background-color: grey">Python API</span> highlighting these differences.
+
+# A Quick Example
+Before we go into the details of how to write your own Spark Streaming program,
+let's take a quick look at what a simple Spark Streaming program looks like. Let's say we want to
+count the number of words in text data received from a data server listening on a TCP
+socket. All you need to
+do is as follows.
+
+<div class="codetabs">
+
+<div data-lang="python"  markdown="1" >
+First, we import [StreamingContext](api/python/reference/api/pyspark.streaming.StreamingContext.html#pyspark.streaming.StreamingContext), which is the main entry point for all streaming functionality. We create a local StreamingContext with two execution threads, and batch interval of 1 second.
+
+{% highlight python %}
+from pyspark import SparkContext
+from pyspark.streaming import StreamingContext
+
+# Create a local StreamingContext with two working thread and batch interval of 1 second
+sc = SparkContext("local[2]", "NetworkWordCount")
+ssc = StreamingContext(sc, 1)
+{% endhighlight %}
+
+Using this context, we can create a DStream that represents streaming data from a TCP
+source, specified as hostname (e.g. `localhost`) and port (e.g. `9999`).
+
+* This will become a table of contents (this text will be scraped). {:toc}
+
+This tutorial provides a quick introduction to using Spark. We will first introduce the API through Spark's
+interactive shell (in Python or Scala),
+then show how to write applications in Java, Scala, and Python. To follow along with this guide, first, download a packaged release of Spark from the
+[Spark website](https://spark.apache.org/downloads.html). Since we won't be using HDFS,
+you can download a package for any version

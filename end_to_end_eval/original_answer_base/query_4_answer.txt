@@ -1,0 +1,73 @@
+
+
+# Overview
+
+Spark provides three locations to configure the system:
+
+* [Spark properties](#spark-properties) control most application parameters and can be set by using
+  a [SparkConf](api/scala/org/apache/spark/SparkConf.html) object, or through Java
+  system properties. * [Environment variables](#environment-variables) can be used to set per-machine settings, such as
+  the IP address, through the `conf/spark-env.sh` script on each node. * [Logging](#configuring-logging) can be configured through `log4j2.properties`. # Spark Properties
+
+Spark properties control most application settings and are configured separately for each
+application. These properties can be set directly on a
+[SparkConf](api/scala/org/apache/spark/SparkConf.html) passed to your
+`SparkContext`. `SparkConf` allows you to configure some of the common properties
+(e.g. master URL and application name), as well as arbitrary key-value pairs through the
+`set()` method. For example, we could initialize an application with two threads as follows:
+
+Note that we run with local[2], meaning two threads - which represents "minimal" parallelism,
+which can help detect bugs that only exist when we run in a distributed context. {% highlight scala %}
+val conf = new SparkConf()
+             .setMaster("local[2]")
+             .setAppName("CountingSheep")
+val sc = new SparkContext(conf)
+{% endhighlight %}
+
+Note that we can have more than 1 thread in local mode, and in cases like Spark Streaming, we may
+actually require more than 1 thread to prevent any sort of starvation issues. Properties that specify some time duration should be configured with a unit of time. The following format is accepted:
+
+    25ms (milliseconds)
+    5s (seconds)
+    10m or 10min (minutes)
+    3h (hours)
+    5d (days)
+    1y (years)
+
+
+Properties that specify a byte size should be configured with a unit of size. The following format is accepted:
+
+    1b (bytes)
+    1k or 1kb (kibibytes = 1024 bytes)
+    1m or 1mb (mebibytes = 1024 kibibytes)
+    1g or 1gb (gibibytes = 1024 mebibytes)
+    1t or 1tb (tebibytes = 1024 gibibytes)
+    1p or 1pb (pebibytes = 1024 tebibytes)
+
+While numbers without units are generally interpreted as bytes, a few are interpreted as KiB or MiB. See documentation of individual configuration properties. Specifying units is desirable where
+possible. ## Dynamically Loading Spark Properties
+
+In some cases, you may want to avoid hard-coding certain configurations in a `SparkConf`. For
+instance, if you'd like to run the same application with different masters or different
+amounts of memory. Spark allows you to simply create an empty conf:
+
+{% highlight scala %}
+val sc = new SparkContext(new SparkConf())
+{% endhighlight %}
+
+Then, you can supply configuration values at runtime:
+```sh
+./bin/spark-submit \
+  --name "My app" \
+  --master "local[4]" \
+  --conf spark.eventLog.enabled=false \
+  --conf "spark.executor.extraJavaOptions=-XX:+PrintGCDetails -XX:+PrintGCTimeStamps" \
+  myApp.jar
+```
+
+The Spark shell and [`spark-submit`](submitting-applications.html)
+tool support two ways to load configurations dynamically. The first is command line options,
+such as `--master`, as shown above. `spark-submit` can accept any Spark property using the `--conf/-c`
+flag, but uses special flags for properties that play a part in launching the Spark application. Running `./bin/spark-submit --help` will show the entire list of these options.
+
+* This will become a table of contents (this text will be scraped). {:toc}

@@ -1,0 +1,5 @@
+{
+    "pinecone_api_key": "your_pinecone_api_key_here",
+    "questions_input": "./questions"
+  }
+  

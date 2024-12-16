@@ -1,0 +1,17 @@
+
+
+* Table of contents
+{:toc}
+
+## Upgrading from Core 3.5 to 4.0
+
+- Since Spark 4.0, Spark migrated all its internal reference of servlet API from `javax` to `jakarta` 
+
+- Since Spark 4.0, Spark will roll event logs to archive them incrementally. To restore the behavior before Spark 4.0, you can set `spark.eventLog.rolling.enabled` to `false`. - Since Spark 4.0, Spark will compress event logs. To restore the behavior before Spark 4.0, you can set `spark.eventLog.compress` to `false`. - Since Spark 4.0, Spark workers will clean up worker and stopped application directories periodically. To restore the behavior before Spark 4.0, you can set `spark.worker.cleanup.enabled` to `false`. - Since Spark 4.0, `spark.shuffle.service.db.backend` is set to `ROCKSDB` by default which means Spark will use RocksDB store for shuffle service. To restore the behavior before Spark 4.0, you can set `spark.shuffle.service.db.backend` to `LEVELDB`. - In Spark 4.0, support for Apache Mesos as a resource manager was removed. - Since Spark 4.0, Spark uses `ReadWriteOncePod` instead of `ReadWriteOnce` access mode in persistence volume claims. To restore the legacy behavior, you can set `spark.kubernetes.legacy.useReadWriteOnceAccessMode` to `true`. - Since Spark 4.0, Spark uses the external shuffle service for deleting shuffle blocks for deallocated executors when the shuffle is no longer needed. To restore the legacy behavior, you can set `spark.shuffle.service.removeShuffle` to `false`. - Starting with Spark 4.0, the MDC (Mapped Diagnostic Context) key for Spark task names in Spark logs has been changed from `mdc.taskName` to `task_name`. To use the key `mdc.taskName`, you can set `spark.log.legacyTaskNameMdc.enabled` to `true`. - Since Spark 4.0, Spark performs speculative executions less aggressively with `spark.speculation.multiplier=3` and `spark.speculation.quantile=0.9`. To restore the legacy behavior, you can set `spark.speculation.multiplier=1.5` and `spark.speculation.quantile=0.75`. - Since Spark 4.0, `spark.shuffle.unsafe.file.output.buffer` is deprecated though still works. Use `spark.shuffle.localDisk.file.output.buffer` instead. ## Upgrading from Core 3.4 to 3.5
+
+- Since Spark 3.5, `spark.yarn.executor.failuresValidityInterval` is deprecated. Use `spark.executor.failuresValidityInterval` instead. - Since Spark 3.5, `spark.yarn.max.executor.failures` is deprecated. Use `spark.executor.maxNumFailures` instead. ## Upgrading from Core 3.3 to 3.4
+
+- Since Spark 3.4, Spark driver will own `PersistentVolumnClaim`s and try to reuse if they are not assigned to live executors.## Leveraging Statistics
+Apache Spark's ability to choose the best execution plan among many possible options is determined in part by its estimates of how many rows will be output by every node in the execution plan (read, filter, join, etc.). Those estimates in turn are based on statistics that are made available to Spark in one of several ways:
+
+- **Data source**: Statistics that Spark reads directly from the underlying data source, like the counts and min/max values in the metadata of Parquet files. These statistics are maintained by the underlying data source. - **Catalog**: Statistics that Spark reads from the catalog, like the Hive Metastore. These statistics are collected or updated whenever you run [`ANALYZE TABLE`](sql-ref-syntax-aux-analyze-table.html). - **Runtime**: Statistics that Spark computes itself as a query is running. This is part of the [adaptive query execution framework](#adapt

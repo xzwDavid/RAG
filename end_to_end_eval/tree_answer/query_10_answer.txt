@@ -1,0 +1,15 @@
+To ensure the highest level of security for RPC and local storage encryption in Spark, while maintaining compatibility with older shuffle services, you need to configure a combination of Spark properties and enable specific encryption features. 
+
+1. **RPC Encryption Configuration:**
+   - **Enable RPC Encryption:** Set `spark.network.crypto.enabled` to `true` to enable AES-based RPC encryption. This will ensure that all communications between Spark processes are encrypted.
+   - **Choose Authenticated Encryption Mode:** Configure `spark.network.crypto.cipher` to use an authenticated encryption mode, such as `AES/GCM/NoPadding`. This will provide additional security by verifying the integrity of the data.
+   - **Set Key Derivation Version:** Use `spark.network.crypto.authEngineVersion` to set the key derivation version to `2`. This will apply a KDF to the key exchange output, enhancing security.
+   - **Disable Legacy Protocols:** Although compatible, it is not recommended to use legacy RPC protocols without key derivation (version 1). Set `spark.network.crypto.legacy.enabled` to `false` to disable these older, less secure protocols.
+
+2. **Local Storage Encryption Configuration:**
+   - **Enable Disk Encryption:** Set `spark.io.encryption.enabled` to `true` to enable encryption for temporary data written to local disks. This will ensure that shuffle files, spills, and cached data are encrypted.
+   - **Choose Encryption Key Size:** Use `spark.io.encryption.keySizeBits` to specify the key size for encryption. The default is `128` bits, but you can choose `192` or `256` for additional security.
+   - **Configure Key Generation Algorithm:** Set `spark.io.encryption.keygen.algorithm` to a secure key generation algorithm, such as `HmacSHA1`.
+   - **Enable SASL-Based Encryption for Legacy Compatibility:** If communicating with older shuffle services that do not support the internal Spark authentication protocol, enable SASL-based encryption with `spark.authenticate.enableSaslEncryption`. Although deprecated, this is necessary for compatibility.
+
+By following these configurations, you can achieve a balanced approach to security, leveraging modern encryption standards while still maintaining compatibility with legacy systems. This setup will protect data in transit and at rest, ensuring that your Spark applications are securely operated across a variety of environments.

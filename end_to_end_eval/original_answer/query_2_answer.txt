@@ -1,0 +1,22 @@
+To effectively monitor and manage a Spark application running on a cluster using `spark-submit`, you need to leverage the monitoring tools provided by Spark and understand how `spark-submit` interacts with the Spark application's architecture.
+
+#### Monitoring Tools and Web UI
+1. **Web UI Access**: Each Spark application launches a web UI by default on port 4040 (or successive ports if multiple applications run on the same node). This UI provides real-time information about the application, including scheduler stages, tasks, RDD sizes, memory usage, and environment settings. For example, you can access this UI at `http://<driver-node>:4040`.
+
+2. **Event Logging and History Server**: To persist the information displayed in the web UI, set `spark.eventLog.enabled` to true. This logs Spark events that can be viewed after the application has completed using Spark's history server. The history server provides a web interface at `http://<server-url>:18080` to review both completed and ongoing applications.
+
+#### `spark-submit` and Cluster Architecture
+3. **Submitting Applications**: `spark-submit` is the script used to deploy Spark applications on a cluster. It handles setting up the classpath, configuring the application, and managing the deployment to the cluster.
+
+4. **Driver and Executors**: The `spark-submit` script configures a `SparkContext`, which is crucial in understanding the application's architecture. The `SparkContext` coordinates the cluster resources, allocating executors to run the application's tasks. The driver program, which runs the main function, is connected to these executors, sending tasks to be executed.
+
+5. **Cluster Management**: `spark-submit` can manage applications across various cluster managers, such as standalone, YARN, and Kubernetes. Each manager handles resource allocation differently, but the Spark application is designed to be agnostic to the underlying manager, as long as it can acquire executors.
+
+#### Managing and Monitoring
+6. **Monitoring via `spark-submit`**: Although `spark-submit` is primarily used for deploying applications, it also provides monitoring capabilities. By passing specific arguments, such as `--master` and `--deploy-mode`, you can influence where the driver runs and how it interacts with the executors. This helps in understanding the application's performance and resource usage.
+
+7. **Log Management**: Ensure that log directories are configured correctly for both event logging and the history server. Proper log management is crucial for debugging and analyzing application performance post-execution.
+
+8. **Resource Allocation and Scaling**: Use `spark-submit` to configure the application's resource requirements, such as memory and CPU allocation, which can be adjusted to optimize performance.
+
+By combining these elements, you can effectively manage and monitor a Spark application from submission through execution and post-mortem analysis, ensuring efficient resource utilization and performance tuning.

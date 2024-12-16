@@ -1,0 +1,74 @@
+n Apache Spark version 3.4.0, task speculation and resource allocation are handled using several mechanisms aimed at improving task performance and managing inefficiencies or failures.
+
+Task Speculation
+Task speculation in Spark addresses scenarios where certain tasks run significantly slower than others. Spark identifies such tasks and re-launches speculative copies on other executors to speed up overall job completion.
+
+Key Configurations for Task Speculation:
+
+spark.speculation:
+Default: false
+Enables speculative execution of tasks. When enabled, Spark monitors running tasks and re-launches slower tasks if necessary.
+spark.speculation.interval:
+Default: 100ms
+The interval at which Spark checks for tasks to speculate.
+spark.speculation.multiplier:
+Default: 3
+A task is considered for speculation if it runs 3x slower than the median task duration.
+spark.speculation.quantile:
+Default: 0.9
+Speculation is enabled only after 90% of the tasks in the stage are completed.
+spark.speculation.minTaskRuntime:
+Default: 100ms
+Minimum runtime before a task is considered for speculation to avoid re-launching short-lived tasks.
+spark.speculation.efficiency.enabled:
+Default: true
+Evaluates task efficiency based on data processing rates and task durations. Speculation is triggered for inefficient tasks when:
+Their data processing rate is below the average rate of completed tasks, scaled by spark.speculation.efficiency.processRateMultiplier (default: 0.75).
+Their duration exceeds a threshold determined by spark.speculation.efficiency.longRunTaskFactor (default: 2) multiplied by the median task duration or the minimum runtime.
+Resource Allocation
+Resource allocation in Spark ensures efficient use of cluster resources by controlling task-level and executor-level configurations.
+
+Key Configurations for Resource Allocation:
+
+spark.task.cpus:
+Default: 1
+Specifies the number of CPU cores allocated to each task. This setting directly affects the number of concurrent tasks per executor.
+spark.task.resource.{resourceName}.amount:
+Default: 1
+Allocates a specific amount of a resource (e.g., GPU) to a task. Fractional amounts (e.g., 0.25) are allowed to enable sharing of resources among multiple tasks.
+spark.executor.resource.{resourceName}.amount:
+Must be set when task-specific resource allocation is used. This ensures that executors have the necessary resources to meet task requirements.
+Handling Task Failures
+Spark has robust mechanisms to handle task failures, ensuring that failed tasks do not disrupt the overall job execution.
+
+Key Configurations for Task Failures:
+
+spark.task.maxFailures:
+Default: 4
+Maximum number of continuous failures allowed for a task before giving up on the job. Each successful attempt resets the failure count.
+spark.excludeOnFailure.enabled:
+Default: false
+Excludes executors or nodes after multiple task failures. This prevents repeatedly scheduling tasks on faulty hardware.
+spark.excludeOnFailure.task.maxTaskAttemptsPerExecutor:
+Default: 1
+Maximum retries for a specific task on an executor before excluding the executor for that task.
+spark.excludeOnFailure.task.maxTaskAttemptsPerNode:
+Default: 2
+Maximum retries for a specific task on a node before excluding the node for that task.
+spark.excludeOnFailure.timeout:
+Default: 1h
+Time duration after which excluded executors or nodes are reinstated for task scheduling.
+spark.excludeOnFailure.killExcludedExecutors:
+Default: false
+Allows Spark to kill excluded executors automatically when they are excluded for the entire application.
+Key Improvements in Version 3.4.0
+Efficiency-Based Speculation:
+Spark evaluates both the processing rate and task duration to identify inefficient tasks for speculation. This feature avoids speculative execution for tasks that are slow for reasons unrelated to inefficiency, such as large input data sizes.
+Speculative Execution of Long-Running Tasks:
+Speculative execution is triggered for tasks that exceed a specific duration, even if their processing rate is acceptable. This avoids prolonged task delays caused by anomalies in resource allocation or workload distribution.
+Summary
+Spark version 3.4.0 combines speculative execution and resource management to address inefficiencies and failures in task execution:
+
+Speculative execution minimizes delays caused by straggler tasks.
+Resource allocation ensures optimal distribution of resources across tasks and executors.
+Failure-handling mechanisms maintain resilience and robustness, reducing the impact of hardware or software faults on job execution.

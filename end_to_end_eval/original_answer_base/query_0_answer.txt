@@ -1,0 +1,69 @@
+
+
+# Spark Security
+
+Security features like authentication are not enabled by default. When deploying a cluster that is open to the internet
+or an untrusted network, it's important to secure access to the cluster to prevent unauthorized applications
+from running on the cluster. Please see [Spark Security](security.html) and the specific security sections in this doc before running Spark. # Spark RPC (Communication protocol between Spark processes)
+
+## Authentication
+
+Spark currently supports authentication for RPC channels using a shared secret. Authentication can
+be turned on by setting the `spark.authenticate` configuration parameter. The exact mechanism used to generate and distribute the shared secret is deployment-specific. Unless
+specified below, the secret must be defined by setting the `spark.authenticate.secret` config
+option. The same secret is shared by all Spark applications and daemons in that case, which limits
+the security of these deployments, especially on multi-tenant clusters. The REST Submission Server supports HTTP `Authorization` header with
+a cryptographically signed JSON Web Token via `JWSFilter`. To enable authorization, Spark Master should have
+`spark.master.rest.filters=org.apache.spark.ui.JWSFilter` and
+`spark.org.apache.spark.ui.JWSFilter.param.secretKey=BASE64URL-ENCODED-KEY` configurations, and
+client should provide HTTP `Authorization` header which contains JSON Web Token signed by
+the shared secret key. Please note that this feature requires a Spark distribution built with
+`jjwt` profile. ### YARN
+
+For Spark on [YARN](running-on-yarn.html), Spark will automatically handle generating and
+distributing the shared secret. Each application will use a unique shared secret. In
+the case of YARN, this feature relies on YARN RPC encryption being enabled for the distribution of
+secrets to be secure. <table class="spark-config">
+<thead><tr><th>Property Name</th><th>Default</th><th>Meaning</th><th>Since Version</th></tr></thead>
+<tr>
+  <td><code>spark.yarn.shuffle.server.recovery.disabled</code></td>
+  <td>false</td>
+  <td>
+    Set to true for applications that have higher security requirements and prefer that their
+    secret is not saved in the db. The shuffle data of such applications wll not be recovered after
+    the External Shuffle Service restarts. </td>
+  <td>3.5.0</td>
+</tr>
+</table>
+
+### Kubernetes
+
+On Kubernetes, Spark will also automatically generate an authentication secret unique to each
+application. The secret is propagated to executor pods using environment variables. This means
+that any user that can list pods in the namespace where the Spark application is running can
+also see their authentication secret. Access control rules should be properly set up by the
+Kubernetes admin to ensure that Spark authentication is secure. <table class="spark-config">
+<thead><tr><th>Property Name</th><th>Default</th><th>Meaning</th><th>Since Version</th></tr></thead>
+<tr>
+  <td><code>spark.authenticate</code></td>
+  <td>false</td>
+  <td>Whether Spark authenticates its internal connections.</td>
+  <td>1.0.0</td>
+</tr>
+<tr>
+  <td><code>spark.authenticate.secret</code></td>
+  <td>None</td>
+  <td>
+    The secret key used authentication. See above for when this configuration should be set. </td>
+  <td>1.0.0</td>
+</tr>
+</table>
+
+Alternatively, one can mount authentication secrets using files and Kubernetes secrets that
+the user mounts into their pods. # Spark Security
+
+Security features like authentication are not enabled by default. When deploying a cluster that is open to the internet
+or an untrusted network, it's important to secure access to the cluster to prevent unauthorized applications
+from running on the cluster. Please see [Spark Security](security.html) and the specific security sections in this doc before running Spark. # Spark RPC (Communication protocol between Spark processes)
+
+## Authentication

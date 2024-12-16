@@ -1,0 +1,67 @@
+
+
+</div>
+
+</div>
+
+## External Datasets
+
+<div class="codetabs">
+
+<div data-lang="python"  markdown="1">
+
+External datasets are created by calling `SparkContext`'s `textFile` method on a file in the Hadoop file system (or any other Hadoop-supported file system). The file is read in parallel and split into lines, which are then converted into a distributed dataset of strings. For example, here is how to create a distributed dataset holding the lines of a file named `/data/myfile`:
+
+{% highlight python %}
+distData = sc.textFile("/data/myfile")
+{% endhighlight %}
+
+Once created, the distributed dataset (`distData`) can be operated on in parallel. For example, we can call `distData.map(lambda line: line.split(" "))` to split each line into a list of words. We describe operations on distributed datasets later on. </div>
+
+<div data-lang="scala"  markdown="1">
+
+External datasets are created by calling `SparkContext`'s `textFile` method on a file in the Hadoop file system (or any other Hadoop-supported file system). The file is read in parallel and split into lines, which are then converted into a distributed dataset of strings. For example, here is how to create a distributed dataset holding the lines of a file named `/data/myfile`:
+
+{% highlight scala %}
+val distData = sc.textFile("/data/myfile")
+{% endhighlight %}
+
+Once created, the distributed dataset (`distData`) can be operated on in parallel. For example, we might call `distData.map(_.split(" "))` to split each line into a list of words. We describe operations on distributed datasets later on. 
+
+</div>
+
+</div>
+
+## Operations on Distributed Datasets
+
+<div class="codetabs">
+
+<div data-lang="python"  markdown="1">
+
+Distributed datasets can be operated on in parallel using a variety of operations. For example, we can call `distData.map(lambda line: line.split(" "))` to split each line into a list of words. This creates a new distributed dataset of lists of words. We can then call `distData.reduce(lambda a, b: a + b)` to add up the elements of the list. We can also call `distData.filter(lambda line: line.startswith("Hello"))` to filter out lines that don't start with "Hello".
+
+Distributed datasets can also be combined with other distributed datasets using operations like `distData1.join(distData2)` to join two datasets together.
+
+Finally, distributed datasets can be saved to disk using `distData.saveAsTextFile("/data/myfile")`. This will save the dataset to a file named `/data/myfile` in the Hadoop file system.
+
+</div>
+
+<div data-lang="scala"  markdown="1">
+
+Distributed datasets can be operated on in parallel using a variety of operations. For example, we can call `distData.map(_.split(" "))` to split each line into a list of words. This creates a new distributed dataset of lists of words. We can then call `distData.reduce((a, b) => a + b)` to add up the elements of the list. We can also call `distData.filter(line => line.startsWith("Hello"))` to filter out lines that don't start with "Hello".
+
+Distributed datasets can also be combined with other distributed datasets using operations like `distData1.join(distData2)` to join two datasets together.
+
+Finally, distributed datasets can be saved to disk using `distData.saveAsTextFile("/data/myfile")`. This will save the dataset to a file named `/data/myfile` in the Hadoop file system.
+
+</div>
+
+</div>
+
+## Persisting Distributed Datasets
+
+<div class="codetabs">
+
+<div data-lang="python"  markdown="1">
+
+Distributed datasets can be persisted in memory using `distData.cache()`. This will keep the dataset in memory on all executors so that it can be reused across operations. For example, we can call `distData.cache()` and then call `distData.map(lambda line: line.split(" "))` to split

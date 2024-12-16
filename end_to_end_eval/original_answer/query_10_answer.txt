@@ -1,0 +1,18 @@
+:** To configure Spark for the highest level of security, we need to enable encryption for RPC and local storage, while also considering compatibility with older shuffle services. Here's how you can achieve this:
+
+1. **RPC Encryption:**
+   - **Enable AES Encryption:** Set `spark.network.crypto.enabled` to `true` to enable AES-based RPC encryption. This will ensure that all communications between Spark processes are encrypted.
+   - **Choose Strong Cipher:** Use `spark.network.crypto.cipher` to specify a strong encryption algorithm like `AES/GCM/NoPadding`. This provides authenticated encryption, protecting against tampering.
+   - **Configure Auth Engine Version:** Use `spark.network.crypto.authEngineVersion` to set the RPC encryption version to 2 for better security properties. Version 2 applies a key derivation function to ensure uniform distribution of session keys.
+   - **Fallback to SASL if Needed:** Enable `spark.authenticate.enableSaslEncryption` to allow a fallback to SASL-based encryption when communicating with older shuffle services, which might not support the Spark internal authentication protocol.
+
+2. **Local Storage Encryption:**
+   - **Enable Disk Encryption:** Set `spark.io.encryption.enabled` to `true` to encrypt temporary data written to local disks. This includes shuffle files, shuffle spills, and cached or broadcast data.
+   - **Choose Key Size:** Use `spark.io.encryption.keySizeBits` to specify the key size for encryption. While 128 bits is the default and recommended for performance, you can choose 192 or 256 bits for enhanced security.
+   - **Set Up Key Generation:** Configure `spark.io.encryption.keygen.algorithm` to ensure proper key generation using a secure algorithm like HmacSHA1.
+
+3. **Configuration for Compatibility:**
+   - **Legacy Configuration Support:** For compatibility with older configurations, ensure that necessary legacy properties are set, such as `spark.network.keySizeBits` for specifying key size in bits rather than the modern `spark.network.crypto.keySizeBits`.
+   - **Dynamic Configuration:** Use `spark-submit` with `--conf` to dynamically adjust configurations at runtime, allowing for flexibility in adapting to different environmental requirements.
+
+By following these steps, you can ensure that your Spark application benefits from modern encryption standards while maintaining compatibility with legacy systems, thus achieving the highest level of security for both RPC and local storage communications.

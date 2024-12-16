@@ -1,0 +1,25 @@
+To effectively monitor and manage a Spark application running on a cluster using `spark-submit`, you need to leverage the web UI and the command-line options available in `spark-submit`.
+
+#### Monitoring Tools and Techniques:
+1. **Web UI Access:**
+   - Each Spark application launches a web UI by default on port 4040 (or successive ports if multiple applications run on the same node). This web UI provides real-time insights into the application's performance, including scheduler stages, tasks, RDD sizes, memory usage, and environment information.
+   - Accessing this web UI helps in monitoring the application's current state and performance metrics.
+
+2. **Event Logging and History Server:**
+   - To monitor the application after it has completed, enable event logging by setting `spark.eventLog.enabled` to `true`. This logs Spark events to a specified directory, which can be viewed using the Spark History Server.
+   - The History Server provides a web interface at `http://<server-url>:18080` to review both completed and ongoing applications. It is crucial to configure the log directory correctly (e.g., `hdfs://namenode/shared/spark-logs`) for the History Server to access the event logs.
+
+#### Management Techniques:
+1. **spark-submit Command-Line Options:**
+   - Use `spark-submit` to manage the application's lifecycle and configure its settings dynamically. For instance, specify the master URL, deployment mode, and other configurations using command-line options.
+   - This allows for flexible management of the application without needing to modify the code or recompile it.
+
+2. **Deployment Modes:**
+   - Choose between `client` and `cluster` deployment modes depending on the proximity of the submission machine to the worker nodes.
+   - `Client` mode is suitable for machines close to the cluster, while `Cluster` mode is better for remote submissions to minimize network latency.
+
+3. **Resource Allocation and Scaling:**
+   - Adjust resource allocation by setting properties like `spark.executor.cores`, `spark.executor.memory`, and `spark.executor.instances` to optimize the usage of cluster resources.
+   - This can be done dynamically via the command line or through the Spark configuration file, allowing for flexible resource management.
+
+By combining these monitoring tools and management techniques, you can effectively oversee the performance and efficiency of a Spark application running on a cluster, ensuring it meets the required standards and making necessary adjustments along the way.
